@@ -3,12 +3,9 @@ from firebase_admin import credentials, initialize_app, auth
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from .core.security import get_current_user, require_user, require_admin
 import uvicorn
-
+import os
 
 app = FastAPI()
-
-
-
 
 @app.get("/")
 def health(user: dict = Depends(require_user)):
@@ -25,4 +22,5 @@ def public():
     return {"message": "This is a public route"}
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
